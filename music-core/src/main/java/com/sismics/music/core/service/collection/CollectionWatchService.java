@@ -49,8 +49,8 @@ public class CollectionWatchService extends AbstractExecutionThreadService {
      */
     private List<Directory> watchedDirectoryList = Collections.synchronizedList(new ArrayList<Directory>());
     
-    public CollectionWatchService() {
-    }
+//    public CollectionWatchService() {
+//    }
 
     @Override
     protected void startUp() {

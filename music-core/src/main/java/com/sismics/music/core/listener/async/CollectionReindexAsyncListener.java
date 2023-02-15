@@ -36,11 +36,10 @@ public class CollectionReindexAsyncListener {
 
         TransactionUtil.handle(() -> {
             // Reindex the whole collection
-            CollectionService collectionService = AppContext.getInstance().getCollectionService();
+            final CollectionService collectionService = AppContext.getInstance().getCollectionService();
             collectionService.reindex();
 
-            // Update the scores
-            collectionService.updateScore();
+
         });
 
         if (log.isInfoEnabled()) {

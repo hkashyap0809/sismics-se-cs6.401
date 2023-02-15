@@ -30,8 +30,6 @@ public class Role {
      */
     private Date deleteDate;
 
-    public Role() {
-    }
 
     public Role(String id, String name, Date createDate, Date deleteDate) {
         this.id = id;

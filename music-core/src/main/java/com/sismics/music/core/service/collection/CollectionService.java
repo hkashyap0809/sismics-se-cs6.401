@@ -48,8 +48,6 @@ public class CollectionService extends AbstractScheduledService {
      */
     private static final Logger log = LoggerFactory.getLogger(CollectionService.class);
 
-    public CollectionService() {
-    }
 
     @Override
     protected void startUp() {
@@ -299,17 +297,4 @@ public class CollectionService extends AbstractScheduledService {
      * Update the album scores.
      * TODO implement a more elaborated scoring function
      */
-    public void updateScore() {
-//        AlbumDao albumDao = new AlbumDao();
-//        List<AlbumDto> albumList = albumDao.findByCriteria(new AlbumCriteria());
-//        for (AlbumDto albumDto : albumList) {
-//            Integer score = albumDao.getFavoriteCountByAlbum(albumDto.getId());
-//
-//            Album album = new Album();
-//            album.setId(albumDto.getId());
-//            album.setScore(score);
-//
-//            albumDao.updateScore(album);
-//        }
-    }
 }
