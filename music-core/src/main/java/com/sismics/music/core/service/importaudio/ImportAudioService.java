@@ -69,8 +69,6 @@ public class ImportAudioService extends AbstractExecutionThreadService {
      */
     private ExecutorService syncExecutor = Executors.newSingleThreadExecutor();
     
-    public ImportAudioService() {
-    }
 
     @Override
     protected void startUp() {

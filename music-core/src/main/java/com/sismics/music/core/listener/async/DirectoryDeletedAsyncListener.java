@@ -1,27 +1,22 @@
 package com.sismics.music.core.listener.async;
 
-import com.google.common.base.Stopwatch;
 import com.google.common.eventbus.Subscribe;
-import com.sismics.music.core.event.async.DirectoryDeletedAsyncEvent;
+import com.sismics.music.core.event.async.DirectoryChangeAsyncEvent;
 import com.sismics.music.core.model.context.AppContext;
 import com.sismics.music.core.model.dbi.Directory;
 import com.sismics.music.core.service.collection.CollectionService;
 import com.sismics.music.core.util.TransactionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.text.MessageFormat;
 
 /**
  * Directory deleted listener.
  *
  * @author jtremeaux
  */
-public class DirectoryDeletedAsyncListener {
+public class DirectoryDeletedAsyncListener implements DirectoryChangeAsyncListener {
     /**
      * Logger.
      */
-    private static final Logger log = LoggerFactory.getLogger(DirectoryDeletedAsyncListener.class);
+	LoggerService<DirectoryDeletedAsyncListener> loggerService;
 
     /**
      * Process the event.
@@ -29,13 +24,10 @@ public class DirectoryDeletedAsyncListener {
      * @param directoryDeletedAsyncEvent New directory deleted event
      */
     @Subscribe
-    public void onDirectoryDeleted(final DirectoryDeletedAsyncEvent directoryDeletedAsyncEvent) throws Exception {
-        if (log.isInfoEnabled()) {
-            log.info("Directory deleted event: " + directoryDeletedAsyncEvent.toString());
-        }
-        Stopwatch stopwatch = Stopwatch.createStarted();
+    public void onDirectoryChange(final DirectoryChangeAsyncEvent directoryChangeAsyncEvent) throws Exception {
+        loggerService.beforeTransactionLogs("Directory deleted event: " + directoryChangeAsyncEvent.toString());
 
-        final Directory directory = directoryDeletedAsyncEvent.getDirectory();
+        final Directory directory = directoryChangeAsyncEvent.getDirectory();
 
         TransactionUtil.handle(() -> {
             // Stop watching the directory
@@ -46,8 +38,6 @@ public class DirectoryDeletedAsyncListener {
             collectionService.removeDirectoryFromIndex(directory);
         });
 
-        if (log.isInfoEnabled()) {
-            log.info(MessageFormat.format("Collection updated in {0}ms", stopwatch));
-        }
+        loggerService.afterTransactionLogs("Collection updated in {0}ms");
     }
 }

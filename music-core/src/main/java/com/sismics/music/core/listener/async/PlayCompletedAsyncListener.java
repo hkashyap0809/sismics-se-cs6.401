@@ -3,25 +3,23 @@ package com.sismics.music.core.listener.async;
 import com.google.common.eventbus.Subscribe;
 import com.sismics.music.core.dao.dbi.UserDao;
 import com.sismics.music.core.dao.dbi.UserTrackDao;
-import com.sismics.music.core.event.async.PlayCompletedEvent;
+import com.sismics.music.core.event.async.PlayChangeEvent;
 import com.sismics.music.core.model.context.AppContext;
 import com.sismics.music.core.model.dbi.Track;
 import com.sismics.music.core.model.dbi.User;
 import com.sismics.music.core.service.lastfm.LastFmService;
 import com.sismics.music.core.util.TransactionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Play completed listener.
  *
  * @author jtremeaux
  */
-public class PlayCompletedAsyncListener {
+public class PlayCompletedAsyncListener implements PlayChangeAsyncListener{
     /**
      * Logger.
      */
-    private static final Logger log = LoggerFactory.getLogger(PlayCompletedAsyncListener.class);
+    LoggerService<PlayCompletedAsyncListener> loggerService;
 
     /**
      * Process the event.
@@ -29,13 +27,12 @@ public class PlayCompletedAsyncListener {
      * @param playCompletedEvent Play completed event
      */
     @Subscribe
-    public void onPlayCompleted(final PlayCompletedEvent playCompletedEvent) throws Exception {
-        if (log.isInfoEnabled()) {
-            log.info("Play completed event: " + playCompletedEvent.toString());
-        }
+    public void onPlayChange(final PlayChangeEvent playChangeEvent) throws Exception {
+    	
+    	loggerService.beforeTransactionLogs("Play completed event: " + playChangeEvent.toString());
 
-        final String userId = playCompletedEvent.getUserId();
-        final Track track = playCompletedEvent.getTrack();
+        final String userId = playChangeEvent.getUserId();
+        final Track track = playChangeEvent.getTrack();
 
         TransactionUtil.handle(() -> {
             // Increment the play count

@@ -35,8 +35,6 @@ public class RolePrivilege {
      */
     private Date deleteDate;
 
-    public RolePrivilege() {
-    }
 
     public RolePrivilege(String id, String roleId, String privilegeId, Date createDate, Date deleteDate) {
         this.id = id;
