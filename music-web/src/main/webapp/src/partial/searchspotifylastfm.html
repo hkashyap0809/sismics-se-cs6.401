@@ -1,0 +1,31 @@
+<div>
+
+  <form class="form-horizontal" name="searchspotifylastfm" novalidate>
+    <div class="form-group" >
+      <label class="col-sm-2 control-label" for="inputGenere">Genere</label>
+      <div class="col-sm-7">
+        <input name="inputGenere" type="text" id="inputGenere" required class="form-control"
+               placeholder="Enter genere" ng-model="spotify.genere" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="form-group" >
+      <label class="col-sm-2 control-label" for="inputPlaylist">Playlist</label>
+      <div class="col-sm-7">
+        <input name="inputPlaylist" type="text" id="inputPlaylist" required class="form-control"
+               placeholder="Enter playlist" ng-model="spotify.playlist" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="form-group" ng-init="testReturn='hello'">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-model="testReturn" ng-click="searchSpotify()" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> Search
+        </button>
+      </div>
+      <h1>{{testReturn}}</h1>
+      <h1>{{testReturn2}}</h1>
+    </div>
+  </form>
+
+</div>
