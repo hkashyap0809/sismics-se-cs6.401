@@ -33,6 +33,15 @@ angular.module('music',
               }
             }
           })
+          .state('searchspotifylastfm',{
+            url:'/searchspotifylastfm',
+            views : {
+              'page':{
+                templateUrl : 'partial/searchspotifylastfm.html',
+                controller : 'SearchSpotifyLastfm'
+              }
+            }
+          })
           .state('main', {
             url: '',
             abstract: true,
