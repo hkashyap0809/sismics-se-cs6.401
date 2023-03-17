@@ -1,30 +1,34 @@
 <div>
-
   <form class="form-horizontal" name="searchspotifylastfm" novalidate>
-    <div class="form-group" >
-      <label class="col-sm-2 control-label" for="inputGenere">Genere</label>
+        <div class="form-group" >
+    <div class="col-sm-12">
+      <label class="col-sm-2 control-label" for="searchQueryType">Search Type</label>
+    	<input type="radio" id="artist" name="artist" value="artist" ng-model="searchQueryType">
+  		<label for="album">Artist</label>
+    	<input type="radio" id="track" name="track" value="track" ng-model="searchQueryType">
+  		<label for="track">Track</label>
+  	</div>
+      <label class="col-sm-2 control-label" for="searchQueryString">Search</label>
       <div class="col-sm-7">
-        <input name="inputGenere" type="text" id="inputGenere" required class="form-control"
-               placeholder="Enter genere" ng-model="spotify.genere" autocomplete="off" />
+        <input name="queryString" type="text" id="inputPlaylist" required class="form-control"
+               placeholder="Enter artist/track name" ng-model="searchQueryString" autocomplete="off" />
       </div>
     </div>
 
-    <div class="form-group" >
-      <label class="col-sm-2 control-label" for="inputPlaylist">Playlist</label>
-      <div class="col-sm-7">
-        <input name="inputPlaylist" type="text" id="inputPlaylist" required class="form-control"
-               placeholder="Enter playlist" ng-model="spotify.playlist" autocomplete="off" />
-      </div>
-    </div>
-
-    <div class="form-group" ng-init="testReturn='hello'">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-primary" ng-model="testReturn" ng-click="searchSpotify()" >
-          <span class="glyphicon glyphicon glyphicon-flash"></span> Search
+        <button type="submit" class="btn btn-primary" ng-click="searchSpotify(searchQueryString)" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> Search On Spotify
         </button>
       </div>
-      <h1>{{testReturn}}</h1>
-      <h1>{{testReturn2}}</h1>
+      
+      <br/><br />
+      
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-click="searchLastfm(searchQueryString)" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> Search On LastFM
+        </button>
+      </div>
+      <h1>{{searchData}}</h1>
     </div>
   </form>
 
