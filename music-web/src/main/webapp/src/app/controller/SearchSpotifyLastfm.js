@@ -1,7 +1,48 @@
 'use strict';
+angular.module('music').controller('SearchSpotifyLastfm', function($scope,Restangular, $http) {
+//var searchUrl = 'https://api.spotify.com/v1/search?q=Arijit singh&type=album&market=ES&limit=10&offset=10';
+	$scope.searchSpotify = function() {
+    	var queryString = $scope.searchQueryString.replace(/\s+/g, "+");
+		var queryParams = {thirdPartyType:'SPOTIFY',queryString:queryString, queryType:$scope.searchQueryType}
+		console.log(queryParams);
+  		Restangular.one('search/search-third-party').get(queryParams).then(function(data) {
+	   		alert('data fetched')
+			console.log(data)
+    		$scope.searchData = data;
+  		}, function(error){
+	  		alert("Error Fetching data")
+	  		console.log(error)
+  		});
+  		
+  	}
+  	
+  	$scope.searchLastfm = function(){
+		var queryString = $scope.searchQueryString.replace(/\s+/g, "+");
+		var queryParams = {thirdPartyType:'LASTFM',queryString:queryString, queryType:$scope.searchQueryType}
+		console.log(queryParams)
+		Restangular.one('search/search-third-party').get(queryParams).then(function(data) {
+	   		alert('data fetched')
+			console.log(data)
+    		$scope.searchData = data;
+  		}, function(error){
+	  		alert("Error Fetching data")
+	  		console.log(error)
+  		});
+	  }
+});
 
-
-// angular.module('music').controller('SearchSpotifyLastfm', function($rootScope, $scope, User, Restangular) {
+    //$http.get(searchUrl, {headers: { Authorization: 'Bearer BQC8L6LwnfTZqq7uiGImwyFPQzuwBkA34EfwVj20Pm1EXdo4Ztp5vMnFZCqvjCOEQFKvtZPliOhoVSVDOzehbXArvcHcNtP3UJy1BVsM9r3dYPKIO-yXQvrd9AXMSBbUK_jUTs_4MYfHkWo4kxwCFeA2GqjYMdryyNDBTwSmgTZlSo1P5-uvcFRiNvv9gQhBRw6E'}})
+      //.then(function(response) {
+        // $scope.testReturn = response.data.tracks.items;
+       // console.log('fetching data: ', response.data);
+        // $scope.testReturn="success";
+     // }, function(error) {
+      //  console.log('Error fetching data: ', error);
+      //});
+  //});
+  
+  
+  // angular.module('music').controller('SearchSpotifyLastfm', function($rootScope, $scope, User, Restangular) {
 //     // Edit user
 //     $scope.searchSpotify = function() {
 
@@ -51,18 +92,3 @@
 //     //   });
 //     // };
 //   });
-
-
-  angular.module('music').controller('SearchSpotifyLastfm', function($scope, $http) {
-    var searchUrl = 'https://api.spotify.com/v1/search?q=Arijit singh&type=album&market=ES&limit=10&offset=10';
-    // Replace QUERY with your search term
-    
-    $http.get(searchUrl, {headers: { Authorization: 'Bearer BQC8L6LwnfTZqq7uiGImwyFPQzuwBkA34EfwVj20Pm1EXdo4Ztp5vMnFZCqvjCOEQFKvtZPliOhoVSVDOzehbXArvcHcNtP3UJy1BVsM9r3dYPKIO-yXQvrd9AXMSBbUK_jUTs_4MYfHkWo4kxwCFeA2GqjYMdryyNDBTwSmgTZlSo1P5-uvcFRiNvv9gQhBRw6E'}})
-      .then(function(response) {
-        // $scope.testReturn = response.data.tracks.items;
-        console.log('fetching data: ', response.data);
-        // $scope.testReturn="success";
-      }, function(error) {
-        console.log('Error fetching data: ', error);
-      });
-  });

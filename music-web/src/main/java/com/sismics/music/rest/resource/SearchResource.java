@@ -12,6 +12,9 @@ import com.sismics.music.core.dao.dbi.dto.TrackDto;
 import com.sismics.music.core.util.dbi.PaginatedList;
 import com.sismics.music.core.util.dbi.PaginatedLists;
 import com.sismics.music.rest.util.JsonUtil;
+import com.sismics.music.thirdpartyintegration.ThirdPartyIntegrationService;
+import com.sismics.music.thirdpartyintegration.ThirdPartyLastFM;
+import com.sismics.music.thirdpartyintegration.ThirdPartySpotify;
 import com.sismics.rest.exception.ForbiddenClientException;
 import com.sismics.rest.util.Validation;
 
@@ -24,6 +27,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.util.List;
+
+import java.io.IOException;
 
 /**
  * Search REST resources.
@@ -114,4 +119,47 @@ public class SearchResource extends BaseResource {
         
         return renderJson(response);
     }
+    
+    
+    @GET
+    @Path("/search-third-party")
+    public Response searchThirdParty(@QueryParam("thirdPartyType") String thirdPartyType,
+    		@QueryParam("queryType") String queryType,
+    		@QueryParam("queryString") String queryString
+    		) throws IOException {
+    	ThirdPartyIntegrationService thirdpartyIntegrationService = new ThirdPartyIntegrationService();
+    	
+    	thirdpartyIntegrationService.setStrategy(new ThirdPartySpotify());
+    	if(thirdPartyType.equals("SPOTIFY")) {
+    		thirdpartyIntegrationService.setStrategy(new ThirdPartySpotify());
+    	}else if(thirdPartyType.equals("LASTFM")) {
+    		thirdpartyIntegrationService.setStrategy(new ThirdPartyLastFM());
+    	}
+    	System.out.println("hello");
+    	
+    	String responseString=thirdpartyIntegrationService.searchSongs(queryString,queryType);
+    	
+    	System.out.println("print "+responseString);
+        return Response.ok(responseString).build();
+    	
+    }
+    
+    @GET
+    @Path("/recommend-third-party")
+    public Response recommendThirdParty(@QueryParam("thirdPartyType") String thirdPartyType,
+    		@QueryParam("queryType") String queryType,
+    		@QueryParam("queryString") String queryString) throws IOException {
+    	ThirdPartyIntegrationService thirdpartyIntegrationService = new ThirdPartyIntegrationService();
+    	if(thirdPartyType.equals("SPOTIFY")) {
+    		thirdpartyIntegrationService.setStrategy(new ThirdPartySpotify());
+    	}else if(thirdPartyType.equals("LASTFM")) {
+    		thirdpartyIntegrationService.setStrategy(new ThirdPartyLastFM());
+    	}
+    	
+    	String responseString = thirdpartyIntegrationService.recommendSongs(queryString,queryType);
+    	return Response.ok(responseString).build();
+    	
+    }
+
 }
+
