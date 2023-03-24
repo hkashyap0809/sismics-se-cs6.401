@@ -1,4 +1,5 @@
 'use strict';
+//to be removed from here and updated in playlist
 angular.module('music').controller('RecommendSpotifyLastfm', function($scope,Restangular, $http) {
 //var searchUrl = 'https://api.spotify.com/v1/search?q=Arijit singh&type=album&market=ES&limit=10&offset=10';
 	$scope.recommendSpotify = function() {
