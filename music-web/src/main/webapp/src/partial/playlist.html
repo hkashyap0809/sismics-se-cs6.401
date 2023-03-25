@@ -9,6 +9,10 @@
       <button class="btn btn-link" ng-click="shuffleAllTracks()"><span class="glyphicon glyphicon-random"></span> Shuffle</button>
       <button class="btn btn-link" ng-click="addAllTracks()"><span class="glyphicon glyphicon-plus"></span> Add all</button>
       <button class="btn btn-link" ng-click="remove()"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+      <button class="btn btn-link" ng-click="spotifyRecommend()"><img src="img/spotify.svg" style="height:20px;" 
+style="width:20px;"/>Spotify Recommendation</button>
+<button class="btn btn-link" ng-click="lastfmRecommend()"><img src="img/last-fm.svg" style="height:20px;" 
+style="width:20px;"/>LastFM Recommendation</button>
     </div>
 
     <table class="table table-striped table-playing-tracks">
@@ -44,6 +48,7 @@
     </table>
   </div>
 </div>
+{{recommendedTracks.tracks}}
 
 <div class="big-loader-container row" ng-show="!playlist">
   <div class="big-loader">

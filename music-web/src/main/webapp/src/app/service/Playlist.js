@@ -314,7 +314,7 @@ angular.module('music').factory('Playlist', function($rootScope, Restangular, to
 
     currentStatus: function() { return currentStatus; },
     currentOrder: function() { return currentTrack; },
-    getTracks: function() { return angular.copy(tracks); },
+    getTracks: function() {return angular.copy(tracks); },
     isRepeat: function() { return repeat; },
     toggleRepeat: function() {
       repeat = !repeat;

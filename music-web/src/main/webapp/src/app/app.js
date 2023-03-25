@@ -43,7 +43,6 @@ angular.module('music',
               }
             }
           })
-          //recommendation
           .state('recommendspotifylastfm',{
             url:'/recommendspotifylastfm',
             views : {

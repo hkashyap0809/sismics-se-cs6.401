@@ -2,6 +2,8 @@ package com.sismics.music.thirdpartyintegration;
 
 import java.io.IOException;
 
+import javax.ws.rs.core.Response;
+
 public class ThirdPartyIntegrationService 
 {
 	private ThirdPartyIntegrationStrategy thirdPartyIntegrationStrategy;
@@ -10,11 +12,11 @@ public class ThirdPartyIntegrationService
 		this.thirdPartyIntegrationStrategy = thirdPartyIntegrationStrategy;
 	}
 	
-	public String searchSongs(String queryString,String queryType) throws IOException {
+	public Response searchSongs(String queryString,String queryType) throws IOException {
 		return thirdPartyIntegrationStrategy.search(queryString,queryType);
 	}
 	
-	public String recommendSongs(String queryString,String queryType) throws IOException {
+	public Response recommendSongs(String queryString,String queryType) throws IOException {
 		return thirdPartyIntegrationStrategy.recommend(queryString,queryType);
 	}
 }

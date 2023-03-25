@@ -135,12 +135,10 @@ public class SearchResource extends BaseResource {
     	}else if(thirdPartyType.equals("LASTFM")) {
     		thirdpartyIntegrationService.setStrategy(new ThirdPartyLastFM());
     	}
-    	System.out.println("hello");
     	
-    	String responseString=thirdpartyIntegrationService.searchSongs(queryString,queryType);
+    	Response response=thirdpartyIntegrationService.searchSongs(queryString,queryType);
     	
-    	System.out.println("print "+responseString);
-        return Response.ok(responseString).build();
+        return response;
     	
     }
     
@@ -149,6 +147,11 @@ public class SearchResource extends BaseResource {
     public Response recommendThirdParty(@QueryParam("thirdPartyType") String thirdPartyType,
     		@QueryParam("queryType") String queryType,
     		@QueryParam("queryString") String queryString) throws IOException {
+    	System.out.println("IN RECOMMEND JAVA API");
+    	System.out.println(thirdPartyType);
+    	System.out.println(queryType);
+    	System.out.println(queryString);
+    	
     	ThirdPartyIntegrationService thirdpartyIntegrationService = new ThirdPartyIntegrationService();
     	if(thirdPartyType.equals("SPOTIFY")) {
     		thirdpartyIntegrationService.setStrategy(new ThirdPartySpotify());
@@ -156,8 +159,10 @@ public class SearchResource extends BaseResource {
     		thirdpartyIntegrationService.setStrategy(new ThirdPartyLastFM());
     	}
     	
-    	String responseString = thirdpartyIntegrationService.recommendSongs(queryString,queryType);
-    	return Response.ok(responseString).build();
+//    	for last fm => queryString: artists and queryType: tracks
+//    	for spotify => queryString: artists and queryType : "seed_artists"
+    	Response response = thirdpartyIntegrationService.recommendSongs(queryString,queryType);
+    	return response;
     	
     }
 
