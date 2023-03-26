@@ -17,6 +17,11 @@ import com.sismics.music.core.util.dbi.PaginatedList;
 import com.sismics.music.core.util.dbi.PaginatedLists;
 import com.sismics.music.core.util.dbi.SortCriteria;
 import com.sismics.music.rest.constant.Privilege;
+import com.sismics.music.usercreation.InputValidationHandler;
+import com.sismics.music.usercreation.PlaylistCreationHandler;
+import com.sismics.music.usercreation.UserCreationApplication;
+import com.sismics.music.usercreation.UserCreationEventHandler;
+import com.sismics.music.usercreation.UserEntityCreationHandler;
 import com.sismics.rest.exception.ClientException;
 import com.sismics.rest.exception.ForbiddenClientException;
 import com.sismics.rest.exception.ServerException;
@@ -45,6 +50,36 @@ import java.util.Set;
  */
 @Path("/user")
 public class UserResource extends BaseResource {
+	
+	@PUT
+	@Path("/create-account")
+	public Response createAccount(
+	        @FormParam("username") String username,
+	        @FormParam("password") String password,
+	        @FormParam("locale") String localeId,
+	        @FormParam("email") String email) {
+		
+		UserCreationApplication userCreationApplication = new UserCreationApplication(username,password,localeId,email,request);
+		
+		//validate the input data
+		InputValidationHandler inputValidationHandler = new InputValidationHandler();
+		//create the user
+		UserEntityCreationHandler userEntityCreationHandler = new UserEntityCreationHandler();
+		//Create the default playlist for this user
+		PlaylistCreationHandler playlistCreationHandler = new PlaylistCreationHandler();
+		//Raise a user creation event
+		UserCreationEventHandler userCreationEventHandler = new UserCreationEventHandler();
+		
+//		setting up chain of responsibility
+		inputValidationHandler.setNextHandler(userEntityCreationHandler);
+		userEntityCreationHandler.setNextHandler(playlistCreationHandler);
+		playlistCreationHandler.setNextHandler(userCreationEventHandler);
+		
+		
+		inputValidationHandler.processApplication(userCreationApplication);
+		
+		return okJson();
+	}
     /**
      * Creates a new user.
      * 
@@ -60,11 +95,12 @@ public class UserResource extends BaseResource {
         @FormParam("password") String password,
         @FormParam("locale") String localeId,
         @FormParam("email") String email) {
-
-        if (!authenticate()) {
-            throw new ForbiddenClientException();
-        }
-        checkPrivilege(Privilege.ADMIN);
+    	
+//    	Anyone can create an account, admin or any other user
+//        if (!authenticate()) {
+//            throw new ForbiddenClientException();
+//        }
+//        checkPrivilege(Privilege.ADMIN);
         
         // Validate the input data
         username = Validation.length(username, "username", 3, 50);

@@ -24,6 +24,15 @@ angular.module('music',
               }
             }
           })
+          .state('create-account',{
+			  url:'/create-account',
+			  views : {
+				  'page':{
+					  templateUrl : 'partial/create-account.html',
+					  controller : 'CreateAccount'
+				  }
+			  }
+		  })
           .state('tag', {
             url: '/album/:id/tag',
             views: {
