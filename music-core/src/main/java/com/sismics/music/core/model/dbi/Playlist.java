@@ -26,8 +26,19 @@ public class Playlist {
      * Playlist name.
      */
     private String name;
+    
+    
+    private String privacy;
 
-    public Playlist() {
+    public String getPrivacy() {
+		return privacy;
+	}
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+	}
+
+	public Playlist() {
     }
 
     public Playlist(String id) {
@@ -117,6 +128,7 @@ public class Playlist {
                 .add("id", id)
                 .add("userId", userId)
                 .add("name", name)
+                .add("privacy", privacy)
                 .toString();
     }
 }

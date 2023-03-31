@@ -44,17 +44,24 @@ public class PlaylistResource extends BaseResource {
      */
     @PUT
     public Response createPlaylist(
-            @FormParam("name") String name) {
+            @FormParam("name") String name, @FormParam("privacy") String privacy) {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
-
+        
+        
         Validation.required(name, "name");
+        System.out.println("CREATING PLAYLIST PLAYLIST RESOURCE");
+        System.out.println(principal.getId());
+        System.out.println(principal.getName());
+        System.out.println("playlist name "+name);
+        System.out.println("playlist privacy "+privacy);
 
         // Create the playlist
         Playlist playlist = new Playlist();
         playlist.setUserId(principal.getId());
         playlist.setName(name);
+        playlist.setPrivacy(privacy);
         Playlist.createPlaylist(playlist);
 
         // Output the playlist
@@ -64,6 +71,7 @@ public class PlaylistResource extends BaseResource {
                         .add("name", playlist.getName())
                         .add("trackCount", 0)
                         .add("userTrackPlayCount", 0)
+                        .add("privacy", playlist.getPrivacy())
                         .build()));
     }
 
@@ -444,31 +452,110 @@ public class PlaylistResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
+        System.out.println("playlist resource list playlists");
+        System.out.println("PRINCIPAL ID");
+        System.out.println(principal.getId().toString());
+        System.out.println(principal.getName().toString());
+        
+        
+        System.out.println("getting private personel playlists");
 
-        // Get the playlists
+        // Get the personel private playlists
         PaginatedList<PlaylistDto> paginatedList = PaginatedLists.create(limit, offset);
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
         new PlaylistDao().findByCriteria(paginatedList, new PlaylistCriteria()
-                .setDefaultPlaylist(false)
-                .setUserId(principal.getId()), sortCriteria, null);
+        		.setDefaultPlaylist(false)
+                .setPrivacy("private")
+                .setUserId(principal.getId().toString()), sortCriteria, null);
 
+        System.out.println("private playlits fetched");
+        
         // Output the list
+        System.out.println("private playlists");
         JsonObjectBuilder response = Json.createObjectBuilder();
         JsonArrayBuilder items = Json.createArrayBuilder();
         for (PlaylistDto playlist : paginatedList.getResultList()) {
+        	System.out.println( playlist.toString());
+        	if(playlist.getName()==null)
+        		continue;
             items.add(Json.createObjectBuilder()
                     .add("id", playlist.getId())
                     .add("name", playlist.getName())
                     .add("trackCount", playlist.getPlaylistTrackCount())
+                    .add("privacy", playlist.getPrivacy())
                     .add("userTrackPlayCount", playlist.getUserTrackPlayCount()));
         }
-
+        
+        // Getting public the playlists
+        System.out.println("getting public playlists");
+        
+        PaginatedList<PlaylistDto> paginatedList2 = PaginatedLists.create(limit, offset);
+        SortCriteria sortCriteria2 = new SortCriteria(sortColumn, asc);
+        new PlaylistDao().findByCriteria(paginatedList2, new PlaylistCriteria()
+                .setPrivacy("public"), sortCriteria2, null);
+       
+        System.out.println("public playlists fetched");
+        
+        System.out.println("public playlists");
+        
+//        if the userd id is of the logged in user , then treat it as its personel playlist
+//        in collobarative plylist, any one can add, but in public playlist on the owner can add
+        
+        // Output the list
+        for (PlaylistDto playlist : paginatedList2.getResultList()) {
+        	System.out.println( playlist.toString());
+        	if(playlist.getName()==null)
+        		continue;
+        	if(playlist.getUserId() == principal.getId()) {
+        		items.add(Json.createObjectBuilder()
+                        .add("id", playlist.getId())
+                        .add("name", playlist.getName())
+                        .add("trackCount", playlist.getPlaylistTrackCount())
+                        .add("privacy", "private")
+                        .add("userTrackPlayCount", playlist.getUserTrackPlayCount()));
+        	}else {
+        		items.add(Json.createObjectBuilder()
+                    .add("id", playlist.getId())
+                    .add("name", playlist.getName())
+                    .add("trackCount", playlist.getPlaylistTrackCount())
+                    .add("privacy", playlist.getPrivacy())
+                    .add("userTrackPlayCount", playlist.getUserTrackPlayCount()));
+        	}
+        }
+        
+        
+        System.out.println("getting collaborative playlists");
+        
+        PaginatedList<PlaylistDto> paginatedList3 = PaginatedLists.create(limit, offset);
+        SortCriteria sortCriteria3 = new SortCriteria(sortColumn, asc);
+        new PlaylistDao().findByCriteria(paginatedList3, new PlaylistCriteria()
+                .setPrivacy("collaborative"), sortCriteria3, null);
+       
+        System.out.println("collaborative playlists fetched");
+        System.out.println("collaborative playlists");
+        // Output the list
+        for (PlaylistDto playlist : paginatedList3.getResultList()) {
+        	System.out.println( playlist.toString());
+        	if(playlist.getName()==null)
+        		continue;
+        		items.add(Json.createObjectBuilder()
+                    .add("id", playlist.getId())
+                    .add("name", playlist.getName())
+                    .add("trackCount", playlist.getPlaylistTrackCount())
+                    .add("privacy", playlist.getPrivacy())
+                    .add("userTrackPlayCount", playlist.getUserTrackPlayCount()));
+        	
+        }
+        
+        
         response.add("total", paginatedList.getResultCount());
         response.add("items", items);
-
+        
+        
+        
         return renderJson(response);
     }
-
+    
     /**
      * Returns all tracks in the playlist.
      *
@@ -483,14 +570,15 @@ public class PlaylistResource extends BaseResource {
         }
 
         // Get the playlist
-        PlaylistCriteria criteria = new PlaylistCriteria()
-                .setUserId(principal.getId());
-        if (DEFAULt_playlist.equals(playlistId)) {
-            criteria.setDefaultPlaylist(true);
-        } else {
-            criteria.setDefaultPlaylist(false);
-            criteria.setId(playlistId);
-        }
+        PlaylistCriteria criteria = new PlaylistCriteria();
+//                .setUserId(principal.getId());
+//        if (DEFAULt_playlist.equals(playlistId)) {
+//            criteria.setDefaultPlaylist(true);
+//        } else {
+//            criteria.setDefaultPlaylist(false);
+//            criteria.setId(playlistId);
+//        }
+        criteria.setId(playlistId);
         PlaylistDto playlist = new PlaylistDao().findFirstByCriteria(criteria);
         notFoundIfNull(playlist, "Playlist: " + playlistId);
 

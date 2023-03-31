@@ -51,8 +51,21 @@
           <span class="glyphicon glyphicon-search form-control-feedback"></span>
         </div>
       </li>
-      <li ng-if="playlists.length == 0" class="text-center text-muted">No playlist</li>
-      <li bindonce ng-repeat="playlist in playlists | filter: { name: playlistSearch }">
+      <label>My Personel Playlists</label>
+      <li ng-if="personelPlaylists.length == 0" class="text-center text-muted">No playlist</li>
+      <li bindonce ng-repeat="playlist in personelPlaylists | filter: { name: playlistSearch }">
+        <a ng-href="#/playlist/{{ playlist.id }}" bo-text="playlist.name"></a>
+      </li>
+      
+      <label>Public Playlists</label>
+      <li ng-if="publicPlaylists.length == 0" class="text-center text-muted">No playlist</li>
+      <li bindonce ng-repeat="playlist in publicPlaylists | filter: { name: playlistSearch }">
+        <a ng-href="#/playlist/{{ playlist.id }}" bo-text="playlist.name"></a>
+      </li>
+      
+      <label>Collaborative Playlists</label>
+      <li ng-if="collaborativePlaylists.length == 0" class="text-center text-muted">No playlist</li>
+      <li bindonce ng-repeat="playlist in collaborativePlaylists | filter: { name: playlistSearch }">
         <a ng-href="#/playlist/{{ playlist.id }}" bo-text="playlist.name"></a>
       </li>
     </ul>

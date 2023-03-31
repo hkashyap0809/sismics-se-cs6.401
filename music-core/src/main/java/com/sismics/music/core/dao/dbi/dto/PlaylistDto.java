@@ -6,7 +6,13 @@ package com.sismics.music.core.dao.dbi.dto;
  * @author jtremeaux
  */
 public class PlaylistDto {
-    /**
+    @Override
+	public String toString() {
+		return "PlaylistDto [id=" + id + ", name=" + name + ", userId=" + userId + ", privacy=" + privacy
+				+ ", playlistTrackCount=" + playlistTrackCount + ", userTrackPlayCount=" + userTrackPlayCount + "]";
+	}
+
+	/**
      * Playlist ID.
      */
     private String id;
@@ -20,6 +26,8 @@ public class PlaylistDto {
      * Owner user ID.
      */
     private String userId;
+    
+    private String privacy;
 
     /**
      * Number of tracks in the playlist.
@@ -70,4 +78,12 @@ public class PlaylistDto {
     public void setUserTrackPlayCount(Long userTrackPlayCount) {
         this.userTrackPlayCount = userTrackPlayCount;
     }
+
+	public String getPrivacy() {
+		return privacy;
+	}
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+	}
 }

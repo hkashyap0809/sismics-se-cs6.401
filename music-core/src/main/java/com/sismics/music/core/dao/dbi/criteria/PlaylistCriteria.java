@@ -25,6 +25,9 @@ public class PlaylistCriteria {
      * User ID.
      */
     private String userId;
+    
+    
+    private String privacy;
 
     public String getId() {
         return this.id;
@@ -61,4 +64,19 @@ public class PlaylistCriteria {
         this.userId = userId;
         return this;
     }
+
+	public String getPrivacy() {
+		return privacy;
+	}
+
+	@Override
+	public String toString() {
+		return "PlaylistCriteria [id=" + id + ", defaultPlaylist=" + defaultPlaylist + ", nameLike=" + nameLike
+				+ ", userId=" + userId + ", privacy=" + privacy + "]";
+	}
+
+	public PlaylistCriteria setPrivacy(String privacy) {
+		this.privacy = privacy;
+		return this;
+	}
 }
