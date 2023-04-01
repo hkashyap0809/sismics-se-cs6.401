@@ -13,7 +13,7 @@ angular.module('music').controller('Playlist', function($scope, $state, $statePa
   $scope.getRandomIndexForRecommendation = function(max){
 	  console.log(max+" songs")
 	  let result = []
-	  for (let i=0 ;i<5;i++){
+	  for (let i=0 ;i<Math.min(max,5);i++){
 		  let idx = Math.floor(Math.random() * (max - 0 + 1)) + 0;
 		  result.push(i);
 	  }
