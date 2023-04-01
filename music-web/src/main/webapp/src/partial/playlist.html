@@ -47,8 +47,18 @@ style="width:20px;"/>LastFM Recommendation</button>
       </tbody>
     </table>
   </div>
+  <img src="img/last-fm-album-art.png">
+  <h4>{{recommendedTracks}}</h4>
+  <h2>{{recommendedTracks.reqParams.thirdPartyType}} RECOMMENDATION</h2>      
+      <!-- <h1>{{recommendData.tracks}}</h1> -->
+	    <div ng-repeat="track in recommendedTracks.tracks">
+	    <h3>{{ track.trackName }}</h3>
+    		<p>Artist: {{ track.artist }}</p>
+    		<h4>{{track.albumArt}}</h4>
+		    <img src="img/last-fm-album-art.png">
+		 </div>
 </div>
-{{recommendedTracks.tracks}}
+
 
 <div class="big-loader-container row" ng-show="!playlist">
   <div class="big-loader">

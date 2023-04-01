@@ -1,5 +1,5 @@
 <div>
-  <form class="form-horizontal" name="recommendspotifylastfm" novalidate>    
+  <form class="form-horizontal" name="recommendspotifylastfm" novalidate ></form>    
     <div class="form-group" >
 
       <label class="col-sm-2 control-label" for="recommendQueryString">Artists</label>
@@ -29,7 +29,15 @@
         </button>
       </div>
       </div>
-      <h1>{{recommendData}}</h1>
+      <!-- <h1>LAST FM RECOMMENDATION</h1> -->
+	<h2>{{recommendData.reqParams.thirdPartyType}} RECOMMENDATION</h2>      
+      <!-- <h1>{{recommendData.tracks}}</h1> -->
+	    <div ng-repeat="track in recommendData.tracks">
+	    <h3>{{ track.trackName }}</h3>
+    		<p>Artist: {{ track.artist }}</p>
+    		<h4>{{track.albuArt}}</h4>
+		    <img src="{{ track.albuArt }}" alt="{{ track.trackName }} Album Art">
+		 </div>
     </div>
   </form>
 
