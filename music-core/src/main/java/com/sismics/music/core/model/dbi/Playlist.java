@@ -41,9 +41,9 @@ public class Playlist {
 	public Playlist() {
     }
 
-    public Playlist(String id) {
-        this.id = id;
-    }
+//    public Playlist(String id) {
+//        this.id = id;
+//    }
 
     public Playlist(String id, String userId) {
         this.id = id;
@@ -58,6 +58,10 @@ public class Playlist {
     public String getId() {
         return id;
     }
+    public Playlist(String privacy) {
+    	this.privacy=privacy;
+    }
+    
 
     /**
      * Setter of id.
