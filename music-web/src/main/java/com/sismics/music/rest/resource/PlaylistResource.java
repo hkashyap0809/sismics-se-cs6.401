@@ -51,11 +51,11 @@ public class PlaylistResource extends BaseResource {
         
         
         Validation.required(name, "name");
-        System.out.println("CREATING PLAYLIST PLAYLIST RESOURCE");
-        System.out.println(principal.getId());
-        System.out.println(principal.getName());
-        System.out.println("playlist name "+name);
-        System.out.println("playlist privacy "+privacy);
+//        System.out.println("CREATING PLAYLIST PLAYLIST RESOURCE");
+//        System.out.println(principal.getId());
+//        System.out.println(principal.getName());
+//        System.out.println("playlist name "+name);
+//        System.out.println("playlist privacy "+privacy);
 
         // Create the playlist
         Playlist playlist = new Playlist();
@@ -452,13 +452,13 @@ public class PlaylistResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
-        System.out.println("playlist resource list playlists");
-        System.out.println("PRINCIPAL ID");
-        System.out.println(principal.getId().toString());
-        System.out.println(principal.getName().toString());
+//        System.out.println("playlist resource list playlists");
+//        System.out.println("PRINCIPAL ID");
+//        System.out.println(principal.getId().toString());
+//        System.out.println(principal.getName().toString());
         
         
-        System.out.println("getting private personel playlists");
+//        System.out.println("getting private personel playlists");
 
         // Get the personel private playlists
         PaginatedList<PlaylistDto> paginatedList = PaginatedLists.create(limit, offset);
@@ -468,14 +468,14 @@ public class PlaylistResource extends BaseResource {
                 .setPrivacy("private")
                 .setUserId(principal.getId().toString()), sortCriteria, null);
 
-        System.out.println("private playlits fetched");
+//        System.out.println("private playlits fetched");
         
         // Output the list
-        System.out.println("private playlists");
+//        System.out.println("private playlists");
         JsonObjectBuilder response = Json.createObjectBuilder();
         JsonArrayBuilder items = Json.createArrayBuilder();
         for (PlaylistDto playlist : paginatedList.getResultList()) {
-        	System.out.println( playlist.toString());
+//        	System.out.println( playlist.toString());
         	if(playlist.getName()==null)
         		continue;
             items.add(Json.createObjectBuilder()
@@ -487,16 +487,16 @@ public class PlaylistResource extends BaseResource {
         }
         
         // Getting public the playlists
-        System.out.println("getting public playlists");
+//        System.out.println("getting public playlists");
         
         PaginatedList<PlaylistDto> paginatedList2 = PaginatedLists.create(limit, offset);
         SortCriteria sortCriteria2 = new SortCriteria(sortColumn, asc);
         new PlaylistDao().findByCriteria(paginatedList2, new PlaylistCriteria()
                 .setPrivacy("public"), sortCriteria2, null);
        
-        System.out.println("public playlists fetched");
+//        System.out.println("public playlists fetched");
         
-        System.out.println("public playlists");
+//        System.out.println("public playlists");
         
 //        if the userd id is of the logged in user , then treat it as its personel playlist
 //        in collobarative plylist, any one can add, but in public playlist on the owner can add
@@ -524,18 +524,18 @@ public class PlaylistResource extends BaseResource {
         }
         
         
-        System.out.println("getting collaborative playlists");
+//        System.out.println("getting collaborative playlists");
         
         PaginatedList<PlaylistDto> paginatedList3 = PaginatedLists.create(limit, offset);
         SortCriteria sortCriteria3 = new SortCriteria(sortColumn, asc);
         new PlaylistDao().findByCriteria(paginatedList3, new PlaylistCriteria()
                 .setPrivacy("collaborative"), sortCriteria3, null);
        
-        System.out.println("collaborative playlists fetched");
-        System.out.println("collaborative playlists");
+//        System.out.println("collaborative playlists fetched");
+//        System.out.println("collaborative playlists");
         // Output the list
         for (PlaylistDto playlist : paginatedList3.getResultList()) {
-        	System.out.println( playlist.toString());
+//        	System.out.println( playlist.toString());
         	if(playlist.getName()==null)
         		continue;
         		items.add(Json.createObjectBuilder()

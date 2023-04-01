@@ -17,6 +17,8 @@ public class Album {
      * Album ID.
      */
     private String id;
+    
+    private String userId;
 
     /**
      * Directory ID.
@@ -65,8 +67,9 @@ public class Album {
         this.id = id;
     }
 
-    public Album(String id, String directoryId, String artistId, String name, String albumArt, Date createDate, Date updateDate, Date deleteDate, String location) {
+    public Album(String id,String directoryId, String artistId, String name, String albumArt, Date createDate, Date updateDate, Date deleteDate, String location,String userId) {
         this.id = id;
+        this.userId = userId;
         this.directoryId = directoryId;
         this.artistId = artistId;
         this.name = name;
@@ -259,7 +262,16 @@ public class Album {
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("id", id)
+                .add("userId", userId)
                 .add("name", name)
                 .toString();
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

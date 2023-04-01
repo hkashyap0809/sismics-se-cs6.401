@@ -143,6 +143,7 @@ public class CollectionService extends AbstractScheduledService {
      * @param file File to add
      */
     public void indexFile(Directory directory, Path file) {
+    	System.out.println("IN COLLECTION SERVICE :INDEX FILE");
         Stopwatch stopWatch = Stopwatch.createStarted();
         // TODO This method should handle albumarts too
         try {
@@ -183,25 +184,31 @@ public class CollectionService extends AbstractScheduledService {
      * @param track Track entity (updated)
      */
     public void readTrackMetadata(Directory rootDirectory, Path file, Track track) throws Exception {
+    	System.out.println("IN COLLECTION SERVICE : READ TRACK METADATA");
         Path parentPath = file.getParent();
         DirectoryNameParser nameParser = new DirectoryNameParser(parentPath);
         String albumArtistName = StringUtils.abbreviate(nameParser.getArtistName(), 1000).trim();
         String albumName = StringUtils.abbreviate(nameParser.getAlbumName(), 1000).trim();
         ArtistDao artistDao = new ArtistDao();
         
+        
         AudioFile audioFile = AudioFileIO.read(file.toFile());
         Tag tag = audioFile.getTag();
+        
         
         // The album artist can't be null, check is in the directory name parser
         Artist albumArtist = artistDao.getActiveByName(albumArtistName);
         if (albumArtist == null) {
             albumArtist = new Artist();
             albumArtist.setName(albumArtistName);
+            String userId = StringUtils.abbreviate(tag.getFirst(FieldKey.COMMENT), 1000).trim();
+            albumArtist.setUserId(userId);
             artistDao.create(albumArtist);
         }
         
         if (tag == null) {
             // No tag available, use filename as title and album artist as artist, and guess the rest
+        	System.out.println("COLLECTION SERVICE : TAG NOT NULL");
             track.setTitle(Files.getNameWithoutExtension(file.getFileName().toString()));
             track.setArtistId(albumArtist.getId());
             track.setLength((int) (file.toFile().length() / 128000));
@@ -209,13 +216,14 @@ public class CollectionService extends AbstractScheduledService {
             track.setFormat(Files.getFileExtension(file.getFileName().toString()));
             track.setVbr(true);
         } else {
+        	System.out.println("COLLECTION SERVICE : TAG NULL");
             AudioHeader header = audioFile.getAudioHeader();
     
             track.setLength(header.getTrackLength());
             track.setBitrate(header.getSampleRateAsNumber());
             track.setFormat(StringUtils.abbreviate(header.getEncodingType(), 50));
             track.setVbr(header.isVariableBitRate());
-    
+            String userId = StringUtils.abbreviate(tag.getFirst(FieldKey.COMMENT), 1000).trim();
             String order = tag.getFirst(FieldKey.TRACK);
             if (!Strings.isNullOrEmpty(order)) {
                 try {
@@ -239,27 +247,36 @@ public class CollectionService extends AbstractScheduledService {
             
             // Track artist (can be empty string)
             String artistName = StringUtils.abbreviate(tag.getFirst(FieldKey.ARTIST), 1000).trim();
+            
+            
             Artist artist = artistDao.getActiveByName(artistName);
+            
             if (artist == null) {
                 artist = new Artist();
                 artist.setName(artistName);
+                artist.setUserId(userId);
                 artistDao.create(artist);
+                
             }
             track.setArtistId(artist.getId());
         }
+        String userId = StringUtils.abbreviate(tag.getFirst(FieldKey.COMMENT), 1000).trim();
 
         // Track album
         AlbumDao albumDao = new AlbumDao();
         Album album = albumDao.getActiveByArtistIdAndName(albumArtist.getId(), albumName);
+        
         if (album == null) {
             // Import album art
             AlbumArtImporter albumArtImporter = new AlbumArtImporter();
             File albumArtFile = albumArtImporter.scanDirectory(file.getParent());
 
             album = new Album();
+            album.setUserId(userId);
             album.setArtistId(albumArtist.getId());
             album.setDirectoryId(rootDirectory.getId());
             album.setName(albumName);
+            
             album.setLocation(file.getParent().toString());
             if (albumArtFile != null) {
                 // TODO Remove this, albumarts are scanned separately
@@ -268,8 +285,10 @@ public class CollectionService extends AbstractScheduledService {
             Date updateDate = getDirectoryUpdateDate(parentPath);
             album.setCreateDate(updateDate);
             album.setUpdateDate(updateDate);
+//            album.setUserId(album.getUserId());
             albumDao.create(album);
         }
+//        what if the uploaded track already has an existing album
         track.setAlbumId(album.getId());
     }
 

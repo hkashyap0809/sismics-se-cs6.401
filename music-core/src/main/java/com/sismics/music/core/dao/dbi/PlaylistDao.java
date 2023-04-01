@@ -28,8 +28,8 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
         List<String> criteriaList = new ArrayList<>();
         Map<String, Object> parameterMap = new HashMap<>();
         
-        System.out.println("in playlist dao, getQueryParam ");
-        System.out.println(criteria.toString());
+//        System.out.println("in playlist dao, getQueryParam ");
+//        System.out.println(criteria.toString());
         
         StringBuilder sb = new StringBuilder("select p.id as id, p.name as c0,")
                 .append("  p.user_id as userId,")
@@ -98,9 +98,9 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
      * @return Playlist ID
      */
     public String create(Playlist playlist) {
-    	System.out.println("in playlist dao create");
-    	System.out.println(playlist.getUserId());
-    	System.out.println(playlist.toString());
+//    	System.out.println("in playlist dao create");
+//    	System.out.println(playlist.getUserId());
+//    	System.out.println(playlist.toString());
         final Handle handle = ThreadLocalContext.get().getHandle();
         handle.createStatement("insert into " +
                 "  t_playlist(id, user_id, name, privacy)" +

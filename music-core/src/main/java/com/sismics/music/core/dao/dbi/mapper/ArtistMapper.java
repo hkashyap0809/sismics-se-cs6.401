@@ -19,7 +19,8 @@ public class ArtistMapper extends BaseResultSetMapper<Artist> {
                 "name",
                 "namecorrected",
                 "createdate",
-                "deletedate"};
+                "deletedate",
+                "user_id"};
     }
     @Override
     public Artist map(int index, ResultSet r, StatementContext ctx) throws SQLException {
@@ -30,7 +31,8 @@ public class ArtistMapper extends BaseResultSetMapper<Artist> {
             r.getString(columns[column++]),
             r.getString(columns[column++]),
             r.getTimestamp(columns[column++]),
-            r.getTimestamp(columns[column])
+            r.getTimestamp(columns[column++]),
+            r.getString(columns[column])
             );
     }
 }

@@ -9,6 +9,8 @@ import com.sismics.music.core.util.dbi.QueryParam;
 import com.sismics.util.context.ThreadLocalContext;
 import com.sismics.util.dbi.BaseDao;
 import com.sismics.util.dbi.filter.FilterCriteria;
+
+import org.apache.commons.lang.SystemUtils;
 import org.skife.jdbi.v2.Handle;
 
 import java.sql.Timestamp;
@@ -24,20 +26,33 @@ public class ArtistDao extends BaseDao<ArtistDto, ArtistCriteria> {
     protected QueryParam getQueryParam(ArtistCriteria criteria, FilterCriteria filterCriteria) {
         List<String> criteriaList = new ArrayList<>();
         Map<String, Object> parameterMap = new HashMap<>();
-
-        StringBuilder sb = new StringBuilder("select a.id as id, a.name as c0 ");
+        
+        System.out.println("In ARTIST DAO : GET QUERY PARAM");
+        System.out.println(criteria.getUserId());
+        
+        StringBuilder sb = new StringBuilder("select a.id as id, a.user_id as user_id, a.name as c0 ");
+        System.out.println("adding where clause for user id");
+        criteriaList.add("a.user_id =:userId");
+        parameterMap.put("userId", criteria.getUserId());
+        
         sb.append(" from t_artist a ");
-
+        
+        
         // Adds search criteria
         criteriaList.add("a.deletedate is null");
         if (criteria.getId() != null) {
             criteriaList.add("a.id = :id");
             parameterMap.put("id", criteria.getId());
         }
+        
+        
+        
         if (criteria.getNameLike() != null) {
             criteriaList.add("lower(a.name) like lower(:nameLike)");
             parameterMap.put("nameLike", "%" + criteria.getNameLike() + "%");
         }
+        
+        
 
         return new QueryParam(sb.toString(), criteriaList, parameterMap, null, filterCriteria, new ArtistDtoMapper());
     }
@@ -49,14 +64,17 @@ public class ArtistDao extends BaseDao<ArtistDto, ArtistCriteria> {
      * @return Artist ID
      */
     public String create(Artist artist) {
+    	System.out.println("In ARTIST DAO : CREATING A NEW ARTIST");
+    	System.out.println(artist.toString());
         artist.setId(UUID.randomUUID().toString());
         artist.setCreateDate(new Date());
 
         final Handle handle = ThreadLocalContext.get().getHandle();
         handle.createStatement("insert into " +
-                "  t_artist (id, name, namecorrected, createdate)" +
-                "  values(:id, :name, :nameCorrected, :createDate)")
+                "  t_artist (id, user_id, name, namecorrected, createdate)" +
+                "  values(:id, :userId, :name, :nameCorrected, :createDate)")
                 .bind("id", artist.getId())
+                .bind("userId",artist.getUserId())
                 .bind("name", artist.getName())
                 .bind("nameCorrected", artist.getNameCorrected())
                 .bind("createDate", new Timestamp(artist.getCreateDate().getTime()))

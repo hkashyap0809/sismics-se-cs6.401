@@ -6,11 +6,17 @@ import com.sismics.music.core.dao.dbi.dto.AlbumDto;
 import com.sismics.music.core.dao.dbi.mapper.AlbumDtoMapper;
 import com.sismics.music.core.dao.dbi.mapper.AlbumMapper;
 import com.sismics.music.core.model.dbi.Album;
+import com.sismics.music.core.model.dbi.Artist;
+import com.sismics.music.core.model.dbi.PlaylistTrack;
+import com.sismics.music.core.model.dbi.Track;
+import com.sismics.music.core.model.dbi.UserAlbum;
+import com.sismics.music.core.model.dbi.UserTrack;
 import com.sismics.music.core.util.dbi.QueryParam;
 import com.sismics.util.context.ThreadLocalContext;
 import com.sismics.util.dbi.BaseDao;
 import com.sismics.util.dbi.filter.FilterCriteria;
 import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.Query;
 import org.skife.jdbi.v2.util.IntegerMapper;
 
 import java.sql.Timestamp;
@@ -27,7 +33,14 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
         List<String> criteriaList = new ArrayList<>();
         Map<String, Object> parameterMap = new HashMap<>();
 
-        StringBuilder sb = new StringBuilder("select a.id as id, a.name as c0, a.albumart as albumArt, a.artist_id as artistId, ar.name as artistName, a.updatedate as c1, ");
+        StringBuilder sb = new StringBuilder("select a.id as id, a.user_id as user_id, a.name as c0, a.albumart as albumArt, a.artist_id as artistId, ar.name as artistName, a.updatedate as c1, ");
+        
+        System.out.println("In AlbumDao getQueryParam");
+        System.out.println(criteria.getUserId());
+//      setting user id in criteria
+        criteriaList.add("a.user_id =:userId");
+        parameterMap.put("userId", criteria.getUserId());
+        
         if (criteria.getUserId() == null) {
             sb.append("sum(0) as c2");
         } else {
@@ -43,6 +56,9 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
         // Adds search criteria
         criteriaList.add("ar.deletedate is null");
         criteriaList.add("a.deletedate is null");
+        
+
+        
         if (criteria.getId() != null) {
             criteriaList.add("a.id = :id");
             parameterMap.put("id", criteria.getId());
@@ -59,6 +75,62 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
             criteriaList.add("(lower(a.name) like lower(:like) or lower(ar.name) like lower(:like))");
             parameterMap.put("like", "%" + criteria.getNameLike() + "%");
         }
+        
+        
+        
+        System.out.println("fetching all albums");
+        System.out.println();
+        final Handle handle1 = ThreadLocalContext.get().getHandle();
+        Query<Album> albumQuery = handle1.createQuery("Select * from t_album").map(Album.class);
+        List<Album> allAlbums = albumQuery.list();
+        System.out.println(allAlbums.toString());
+        System.out.println();
+        
+        System.out.println("fetching all artists");
+        System.out.println();
+        final Handle handle2 = ThreadLocalContext.get().getHandle();
+        Query<Artist> artistQuery = handle2.createQuery("Select * from t_artist").map(Artist.class);
+        List<Artist> allArtists = artistQuery.list();
+        System.out.println(allArtists.toString());
+        System.out.println();
+        
+        
+        System.out.println("fetching all tracks");
+        System.out.println();
+        final Handle handle3 = ThreadLocalContext.get().getHandle();
+        Query<Track> trackQuery = handle3.createQuery("Select * from t_track").map(Track.class);
+        List<Track> allTracks = trackQuery.list();
+        System.out.println(allTracks.toString());
+        System.out.println();
+        
+        
+//        System.out.println("fetching all user albums");
+//        System.out.println();
+//        final Handle handle4 = ThreadLocalContext.get().getHandle();
+//        Query<UserAlbum> userAlbumQuery = handle4.createQuery("Select * from t_user_album").map(UserAlbum.class);
+//        List<UserAlbum> allUserAlbum = userAlbumQuery.list();
+//        System.out.println(allUserAlbum.toString());
+//        System.out.println();
+//        
+//        
+//        System.out.println("fetching all user tracks");
+//        System.out.println();
+//        final Handle handle5 = ThreadLocalContext.get().getHandle();
+//        Query<UserTrack> userTrackQuery = handle5.createQuery("Select * from t_user_track").map(UserTrack.class);
+//        List<UserTrack> allUserTrack = userTrackQuery.list();
+//        System.out.println(allUserTrack.toString());
+//        System.out.println();
+//        
+//        
+//        System.out.println("fetching all playlist tracks");
+//        System.out.println();
+//        final Handle handle6 = ThreadLocalContext.get().getHandle();
+//        Query<PlaylistTrack> playlistTrackQuery = handle5.createQuery("Select * from t_playlist_track").map(PlaylistTrack.class);
+//        List<PlaylistTrack> allPlaylistTrack = playlistTrackQuery.list();
+//        System.out.println(allPlaylistTrack.toString());
+//        System.out.println();
+        
+        
 
         return new QueryParam(sb.toString(), criteriaList, parameterMap, null, filterCriteria, Lists.newArrayList("a.id"), new AlbumDtoMapper());
     }
@@ -70,6 +142,8 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
      * @return Album ID
      */
     public String create(Album album) {
+    	System.out.println("IN ALBUM DAO : CREATING A NEW ALBUM");
+    	System.out.println(album.toString());
         album.setId(UUID.randomUUID().toString());
         final Date now = new Date();
         if (album.getCreateDate() == null) {
@@ -81,9 +155,10 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
 
         Handle handle = ThreadLocalContext.get().getHandle();
         handle.createStatement("insert into " +
-                " t_album(id, directory_id, artist_id, name, albumart, createdate, updatedate, location)" +
-                " values(:id, :directoryId, :artistId, :name, :albumArt, :createDate, :updateDate, :location)")
+                " t_album(id, user_id, directory_id, artist_id, name, albumart, createdate, updatedate, location)" +
+                " values(:id, :userId, :directoryId, :artistId, :name, :albumArt, :createDate, :updateDate, :location)")
                 .bind("id", album.getId())
+                .bind("userId", album.getUserId())
                 .bind("directoryId", album.getDirectoryId())
                 .bind("artistId", album.getArtistId())
                 .bind("name", album.getName())
@@ -167,7 +242,7 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
      */
     public List<Album> getActiveByArtistId(String artistId) {
         final Handle handle = ThreadLocalContext.get().getHandle();
-        return handle.createQuery("select a.id, a.directory_id, a.artist_id, a.name, a.albumart, a.updatedate, a.createdate, a.deletedate, a.location" +
+        return handle.createQuery("select a.id, a.user_id, a.directory_id, a.artist_id, a.name, a.albumart, a.updatedate, a.createdate, a.deletedate, a.location" +
                 "  from t_album a" +
                 "  where a.artist_id = :artistId and a.deletedate is null")
                 .bind("artistId", artistId)

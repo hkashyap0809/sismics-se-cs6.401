@@ -18,6 +18,7 @@ public class AlbumDtoMapper implements ResultSetMapper<AlbumDto> {
         AlbumDto dto = new AlbumDto();
         dto.setId(r.getString("id"));
         dto.setName(r.getString("c0"));
+        dto.setUserId(r.getString("user_id"));
         dto.setAlbumArt(r.getString("albumArt"));
         dto.setArtistId(r.getString("artistId"));
         dto.setArtistName(r.getString("artistName"));

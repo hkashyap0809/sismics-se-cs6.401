@@ -15,6 +15,7 @@ public class ArtistDto {
      * Album name.
      */
     private String name;
+    private String userId;
     
     public String getId() {
         return id;
@@ -28,7 +29,20 @@ public class ArtistDto {
         return name;
     }
 
-    public void setName(String name) {
+    @Override
+	public String toString() {
+		return "ArtistDto [id=" + id + ", name=" + name + ", userId=" + userId + "]";
+	}
+
+	public void setName(String name) {
         this.name = name;
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

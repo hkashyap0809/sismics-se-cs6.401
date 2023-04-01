@@ -15,6 +15,8 @@ public class ArtistCriteria {
      * Artist name (like).
      */
     private String nameLike;
+    
+    private String userId;
 
     public String getId() {
         return this.id;
@@ -33,4 +35,13 @@ public class ArtistCriteria {
         this.id = id;
         return this;
     }
+
+	public String getUserId() {
+		return this.userId;
+	}
+
+	public ArtistCriteria setUserId(String userId) {
+		this.userId = userId;
+		return this;
+	}
 }

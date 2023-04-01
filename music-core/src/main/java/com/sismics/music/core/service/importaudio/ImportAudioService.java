@@ -454,7 +454,7 @@ public class ImportAudioService extends AbstractExecutionThreadService {
      * @param directory Directory
      */
     public void tagFile(final String fileName, final Integer order, final String title, final String album, final String artist,
-            final String albumArtist, final Directory directory) throws Exception {
+            final String albumArtist, final Directory directory, final String userId) throws Exception {
         syncExecutor.submit((Callable<Void>) () -> {
             // Retrieve the file from imported files
             List<ImportAudioFile> importedFileList = AppContext.getInstance().getImportAudioService().getImportedFileList();
@@ -477,6 +477,7 @@ public class ImportAudioService extends AbstractExecutionThreadService {
                 tag.setField(FieldKey.ALBUM, album);
                 tag.setField(FieldKey.ARTIST, artist);
                 tag.setField(FieldKey.ALBUM_ARTIST, albumArtist);
+                tag.setField(FieldKey.COMMENT,userId);
                 AudioFileIO.write(audioFile);
             } catch (Exception e) {
                 throw new Exception("Error tagging the file", e);

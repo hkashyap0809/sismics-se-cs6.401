@@ -8,11 +8,20 @@ import java.util.Date;
  * @author jtremeaux 
  */
 public class AlbumDto {
-    /**
+    @Override
+	public String toString() {
+		return "AlbumDto [id=" + id + ", userId=" + userId + ", name=" + name + ", albumArt=" + albumArt + ", artistId="
+				+ artistId + ", artistName=" + artistName + ", updateDate=" + updateDate + ", userPlayCount="
+				+ userPlayCount + "]";
+	}
+
+	/**
      * Album ID.
      */
     private String id;
     
+    
+    private String userId;
     /**
      * Album name.
      */
@@ -98,4 +107,12 @@ public class AlbumDto {
     public void setUserPlayCount(Long userPlayCount) {
         this.userPlayCount = userPlayCount;
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }
