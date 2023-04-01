@@ -311,7 +311,7 @@ public class ImportResource extends BaseResource {
         
         // Tag the file
         try {
-            AppContext.getInstance().getImportAudioService().tagFile(fileName, order, title, album, artist, albumArtist, directory);
+            AppContext.getInstance().getImportAudioService().tagFile(fileName, order, title, album, artist, albumArtist, directory,principal.getId());
         } catch (Exception e) {
             throw new ServerException("TagError", e.getMessage(), e);
         }

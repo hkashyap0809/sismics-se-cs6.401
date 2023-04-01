@@ -1,0 +1,36 @@
+<div>
+  <form class="form-horizontal" name="recommendspotifylastfm" novalidate>    
+    <div class="form-group" >
+
+      <label class="col-sm-2 control-label" for="recommendQueryString">Artists</label>
+      <div class="col-sm-10">
+        <input name="queryString" type="text" id="inputPlaylist" required class="form-control"
+               placeholder="Enter artists separated by comma (,)" ng-model="recommendArtists" autocomplete="off" />
+      </div>
+	<br/>
+	<br/>
+      <label class="col-sm-2 control-label" for="recommendQueryString">Tracks</label>
+      <div class="col-sm-10">
+        <input name="queryString" type="text" id="inputPlaylist" required class="form-control"
+               placeholder="Enter tracks separated by comma (,)" ng-model="recommendTracks" autocomplete="off" />
+      </div>
+    </div>
+   
+	<div class="col-6">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-click="recommendSpotify(recommendArtists,recommendTracks)" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> Spotify Recommendation
+        </button>
+      </div>
+      <br/><br />
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-click="recommendLastfm(recommendArtists,recommendTracks)" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> LastFM Recommendation
+        </button>
+      </div>
+      </div>
+      <h1>{{recommendData}}</h1>
+    </div>
+  </form>
+
+</div>

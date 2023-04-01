@@ -273,18 +273,22 @@ public class AlbumResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
-
+        System.out.println(principal.getId()+" - "+principal.getName());
         AlbumDao albumDao = new AlbumDao();
         PaginatedList<AlbumDto> paginatedList = PaginatedLists.create(limit, offset);
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
+        System.out.println("GETTING ALL ALBUMS: ALBUM RESOURCE");
+        System.out.println(principal.getId()+" - "+ principal.getName());
         AlbumCriteria albumCriteria = new AlbumCriteria()
-                .setUserId(principal.getId())
-                .setNameLike(search);
+                .setNameLike(search)
+                .setUserId(principal.getId());
         albumDao.findByCriteria(paginatedList, albumCriteria, sortCriteria, null);
 
         JsonObjectBuilder response = Json.createObjectBuilder();
         JsonArrayBuilder items = Json.createArrayBuilder();
+        System.out.println("Album Resource GET list");
         for (AlbumDto album : paginatedList.getResultList()) {
+        	System.out.println(album.toString());
             items.add(Json.createObjectBuilder()
                     .add("id", album.getId())
                     .add("name", album.getName())
@@ -295,9 +299,9 @@ public class AlbumResource extends BaseResource {
                             .add("id", album.getArtistId())
                             .add("name", album.getArtistName())));
         }
-        
         response.add("total", paginatedList.getResultCount());
         response.add("albums", items);
+        
 
         return renderJson(response);
     }

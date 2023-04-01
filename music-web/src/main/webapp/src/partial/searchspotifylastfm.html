@@ -1,0 +1,35 @@
+<div>
+  <form class="form-horizontal" name="searchspotifylastfm" novalidate>
+        <div class="form-group" >
+    <div class="col-sm-12">
+      <label class="col-sm-2 control-label" for="searchQueryType">Search Type</label>
+    	<input type="radio" id="artist" name="artist" value="artist" ng-model="searchQueryType">
+  		<label for="album">Artist</label>
+    	<input type="radio" id="track" name="track" value="track" ng-model="searchQueryType">
+  		<label for="track">Track</label>
+  	</div>
+      <label class="col-sm-2 control-label" for="searchQueryString">Search</label>
+      <div class="col-sm-7">
+        <input name="queryString" type="text" id="inputPlaylist" required class="form-control"
+               placeholder="Enter artist/track name" ng-model="searchQueryString" autocomplete="off" />
+      </div>
+    </div>
+
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-click="searchSpotify(searchQueryString)" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> Search On Spotify
+        </button>
+      </div>
+      
+      <br/><br />
+      
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-primary" ng-click="searchLastfm(searchQueryString)" >
+          <span class="glyphicon glyphicon glyphicon-flash"></span> Search On LastFM
+        </button>
+      </div>
+      <h1>{{searchData}}</h1>
+    </div>
+  </form>
+
+</div>

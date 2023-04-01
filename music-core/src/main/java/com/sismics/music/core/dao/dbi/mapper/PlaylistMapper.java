@@ -17,6 +17,7 @@ public class PlaylistMapper implements ResultSetMapper<PlaylistDto> {
     public PlaylistDto map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         PlaylistDto dto = new PlaylistDto();
         dto.setId(r.getString("id"));
+        dto.setPrivacy(r.getString("privacy"));
         dto.setName(r.getString("c0"));
         dto.setUserId(r.getString("userId"));
         dto.setPlaylistTrackCount(r.getLong("c1"));

@@ -10,7 +10,8 @@ public class AlbumCriteria {
      * Album ID.
      */
     private String id;
-
+    
+    private String userId;
     /**
      * Directory ID.
      */
@@ -29,7 +30,6 @@ public class AlbumCriteria {
     /**
      * User ID.
      */
-    private String userId;
     
     public String getId() {
         return this.id;
@@ -38,6 +38,14 @@ public class AlbumCriteria {
     public AlbumCriteria setId(String id) {
         this.id = id;
         return this;
+    }
+    
+    public AlbumCriteria setUserId(String userId) {
+        this.userId = userId;
+        return this;
+    }
+    public String getUserId() {
+        return this.userId;
     }
 
     public String getDirectoryId() {
@@ -67,12 +75,4 @@ public class AlbumCriteria {
         return this;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public AlbumCriteria setUserId(String userId) {
-        this.userId = userId;
-        return this;
-    }
 }

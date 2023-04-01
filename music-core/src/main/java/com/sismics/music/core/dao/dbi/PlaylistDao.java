@@ -10,6 +10,7 @@ import com.sismics.util.context.ThreadLocalContext;
 import com.sismics.util.dbi.BaseDao;
 import com.sismics.util.dbi.filter.FilterCriteria;
 import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.Query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,9 +27,13 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
     protected QueryParam getQueryParam(PlaylistCriteria criteria, FilterCriteria filterCriteria) {
         List<String> criteriaList = new ArrayList<>();
         Map<String, Object> parameterMap = new HashMap<>();
-
+        
+//        System.out.println("in playlist dao, getQueryParam ");
+//        System.out.println(criteria.toString());
+        
         StringBuilder sb = new StringBuilder("select p.id as id, p.name as c0,")
                 .append("  p.user_id as userId,")
+                .append("  p.privacy as privacy,")
                 .append("  count(pt.id) as c1,")
                 .append("  sum(utr.playcount) as c2")
                 .append("  from t_playlist p")
@@ -44,6 +49,18 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
             criteriaList.add("p.user_id = :userId");
             parameterMap.put("userId", criteria.getUserId());
         }
+        
+        if (criteria.getPrivacy()!=null && criteria.getPrivacy().equalsIgnoreCase("public")) {
+        	criteriaList.add("p.privacy = :privacy");
+        	parameterMap.put("privacy", "public");
+        }else if(criteria.getPrivacy()!=null && criteria.getPrivacy().equalsIgnoreCase("private")) {
+        	criteriaList.add("p.privacy = :privacy");
+        	parameterMap.put("privacy", "private");
+        }else if(criteria.getPrivacy()!=null && criteria.getPrivacy().equalsIgnoreCase("collaborative")) {
+        	criteriaList.add("p.privacy = :privacy");
+        	parameterMap.put("privacy", "collaborative");
+        }
+        
         if (criteria.getDefaultPlaylist() != null) {
             if (criteria.getDefaultPlaylist()) {
                 criteriaList.add("p.name is null");
@@ -55,9 +72,24 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
             criteriaList.add("lower(p.name) like lower(:nameLike)");
             parameterMap.put("nameLike", "%" + criteria.getNameLike() + "%");
         }
+        
+        
+        
+//        final Handle handle = ThreadLocalContext.get().getHandle();
+//        Query<Playlist> newP = handle.createQuery("select * from t_playlist").map(Playlist.class);
+//        List<Playlist> p = newP.list();
+//        System.out.println("in playlist dao, fetched playlist");
+//        System.out.println(p);
+        
 
         return new QueryParam(sb.toString(), criteriaList, parameterMap, null, filterCriteria, Lists.newArrayList("p.id"), new PlaylistMapper());
     }
+    
+//    public void deleteAllEntries() {
+//    	final Handle handle = ThreadLocalContext.get().getHandle();
+//        handle.createStatement("delete from t_playlist ")
+//                .execute();
+//    }
 
     /**
      * Creates a new playlist.
@@ -66,13 +98,17 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
      * @return Playlist ID
      */
     public String create(Playlist playlist) {
+//    	System.out.println("in playlist dao create");
+//    	System.out.println(playlist.getUserId());
+//    	System.out.println(playlist.toString());
         final Handle handle = ThreadLocalContext.get().getHandle();
         handle.createStatement("insert into " +
-                "  t_playlist(id, user_id, name)" +
-                "  values(:id, :userId, :name)")
+                "  t_playlist(id, user_id, name, privacy)" +
+                "  values(:id, :userId, :name, :privacy)")
                 .bind("id", playlist.getId())
                 .bind("userId", playlist.getUserId())
                 .bind("name", playlist.getName())
+                .bind("privacy", playlist.getPrivacy())
                 .execute();
 
         return playlist.getId();
@@ -142,4 +178,5 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
         }
         return playlistDtoList;
     }
+
 }

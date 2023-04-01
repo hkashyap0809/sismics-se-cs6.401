@@ -18,6 +18,7 @@ public class ArtistDtoMapper implements ResultSetMapper<ArtistDto> {
         ArtistDto dto = new ArtistDto();
         dto.setId(r.getString("id"));
         dto.setName(r.getString("c0"));
+        dto.setUserId(r.getString("user_id"));
         return dto;
     }
 }

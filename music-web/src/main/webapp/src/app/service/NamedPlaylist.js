@@ -6,13 +6,17 @@
 angular.module('music').factory('NamedPlaylist', function($rootScope, $modal, Restangular, toaster) {
   $rootScope.playlists = [];
   var service = {};
-
+	
   service = {
     update: function() {
       Restangular.one('playlist').get({
         limit: 1000
       }).then(function(data) {
-        $rootScope.playlists = data.items;
+		  console.log(data.items)
+        $rootScope.personelPlaylists = data.items.filter(obj => obj.privacy==='private');
+        $rootScope.publicPlaylists = data.items.filter(obj => obj.privacy==='public');
+        $rootScope.collaborativePlaylists = data.items.filter(obj => obj.privacy==='collaborative');
+        $rootScope.playlists = $rootScope.personelPlaylists.concat($rootScope.collaborativePlaylists);
       });
     },
 
@@ -49,23 +53,28 @@ angular.module('music').factory('NamedPlaylist', function($rootScope, $modal, Re
         templateUrl: 'partial/modal.createplaylist.html',
         controller: function($scope, $modalInstance) {
           'ngInject';
-          $scope.ok = function (name) {
-            $modalInstance.close(name);
+          $scope.ok = function (name,playlistPrivacy) {
+			  console.log(playlistPrivacy)
+            $modalInstance.close({name:name,playlistPrivacy:playlistPrivacy});
           };
 
           $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
           };
         }
-      }).result.then(function(name) {
+      }).result.then(function(result) {
+		  console.log(result)
         Restangular.one('playlist').put({
-          name: name
+          name: result.name,
+          privacy : result.playlistPrivacy
         }).then(function(data) {
           $rootScope.playlists.push(data.item);
           service.addToPlaylist(data.item, tracks);
           toaster.pop('success', 'Playlist created', name);
         });
-      });
+      }
+      
+      );
     }
   };
 

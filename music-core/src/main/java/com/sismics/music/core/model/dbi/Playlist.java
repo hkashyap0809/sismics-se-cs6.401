@@ -26,13 +26,24 @@ public class Playlist {
      * Playlist name.
      */
     private String name;
+    
+    
+    private String privacy;
 
-    public Playlist() {
+    public String getPrivacy() {
+		return privacy;
+	}
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+	}
+
+	public Playlist() {
     }
 
-    public Playlist(String id) {
-        this.id = id;
-    }
+//    public Playlist(String id) {
+//        this.id = id;
+//    }
 
     public Playlist(String id, String userId) {
         this.id = id;
@@ -47,6 +58,10 @@ public class Playlist {
     public String getId() {
         return id;
     }
+    public Playlist(String privacy) {
+    	this.privacy=privacy;
+    }
+    
 
     /**
      * Setter of id.
@@ -117,6 +132,7 @@ public class Playlist {
                 .add("id", id)
                 .add("userId", userId)
                 .add("name", name)
+                .add("privacy", privacy)
                 .toString();
     }
 }

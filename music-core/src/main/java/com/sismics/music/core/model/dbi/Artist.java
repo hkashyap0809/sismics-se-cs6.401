@@ -19,6 +19,7 @@ public class Artist {
      * Artist name.
      */
     private String name;
+    private String userId;
 
     /**
      * Artist name corrected.
@@ -38,12 +39,13 @@ public class Artist {
     public Artist() {
     }
 
-    public Artist(String id, String name, String nameCorrected, Date createDate, Date deleteDate) {
+    public Artist(String id, String name, String nameCorrected, Date createDate, Date deleteDate,String userId) {
         this.id = id;
         this.name = name;
         this.nameCorrected = nameCorrected;
         this.createDate = createDate;
         this.deleteDate = deleteDate;
+        this.userId = userId;
     }
 
     /**
@@ -142,6 +144,15 @@ public class Artist {
         return Objects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
+                .add("userId", userId)
                 .toString();
     }
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

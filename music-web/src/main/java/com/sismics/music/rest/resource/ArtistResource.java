@@ -64,13 +64,18 @@ public class ArtistResource extends BaseResource {
         ArtistDao artistDao = new ArtistDao();
         PaginatedList<ArtistDto> paginatedList = PaginatedLists.create(limit, offset);
         SortCriteria sortCriteria = new SortCriteria(sortColumn, asc);
+        System.out.println("GETTING ALL ARTIST: ARTIST RESOURCE");
+        System.out.println(principal.getId()+" - "+ principal.getName());
         ArtistCriteria artistCriteria = new ArtistCriteria()
-                .setNameLike(search);
+                .setNameLike(search)
+        		.setUserId(principal.getId());
         artistDao.findByCriteria(paginatedList, artistCriteria, sortCriteria, null);
-
+        
+        System.out.println("Artist Resource GET list");
         JsonObjectBuilder response = Json.createObjectBuilder();
         JsonArrayBuilder items = Json.createArrayBuilder();
         for (ArtistDto artist : paginatedList.getResultList()) {
+        	System.out.println(artist.toString());
             items.add(Json.createObjectBuilder()
                     .add("id", artist.getId())
                     .add("name", artist.getName()));

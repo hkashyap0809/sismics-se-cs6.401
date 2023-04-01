@@ -24,12 +24,40 @@ angular.module('music',
               }
             }
           })
+          .state('create-account',{
+			  url:'/create-account',
+			  views : {
+				  'page':{
+					  templateUrl : 'partial/create-account.html',
+					  controller : 'CreateAccount'
+				  }
+			  }
+		  })
           .state('tag', {
             url: '/album/:id/tag',
             views: {
               'page': {
                 templateUrl: 'partial/tag.html',
                 controller: 'Tag'
+              }
+            }
+          })
+          //search
+          .state('searchspotifylastfm',{
+            url:'/searchspotifylastfm',
+            views : {
+              'page':{
+                templateUrl : 'partial/searchspotifylastfm.html',
+                controller : 'SearchSpotifyLastfm'
+              }
+            }
+          })
+          .state('recommendspotifylastfm',{
+            url:'/recommendspotifylastfm',
+            views : {
+              'page':{
+                templateUrl : 'partial/recommendspotifylastfm.html',
+                controller : 'RecommendSpotifyLastfm'
               }
             }
           })
