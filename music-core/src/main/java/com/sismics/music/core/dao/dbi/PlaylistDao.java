@@ -28,8 +28,8 @@ public class PlaylistDao extends BaseDao<PlaylistDto, PlaylistCriteria> {
         List<String> criteriaList = new ArrayList<>();
         Map<String, Object> parameterMap = new HashMap<>();
         
-//        System.out.println("in playlist dao, getQueryParam ");
-//        System.out.println(criteria.toString());
+        System.out.println("in playlist dao, getQueryParam ");
+        System.out.println(criteria.toString());
         
         StringBuilder sb = new StringBuilder("select p.id as id, p.name as c0,")
                 .append("  p.user_id as userId,")

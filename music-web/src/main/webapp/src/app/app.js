@@ -3,6 +3,7 @@
 /**
  * Sismics Music application.
  */
+
 angular.module('music',
         // Dependencies
         ['ui.router', 'ui.bootstrap', 'dialog', 'ui.route', 'ui.keypress', 'angular-websocket',

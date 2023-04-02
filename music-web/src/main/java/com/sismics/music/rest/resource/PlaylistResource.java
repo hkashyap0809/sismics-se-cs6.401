@@ -154,14 +154,13 @@ public class PlaylistResource extends BaseResource {
 		if (!authenticate()) {
 			throw new ForbiddenClientException();
 		}
-
+		System.out.println("inserting single track");
 		// Get the track
 		Track track = new TrackDao().getActiveById(trackId);
 		notFoundIfNull(track, "Track: " + trackId);
 
 		// Get the playlist
-		PlaylistCriteria criteria = new PlaylistCriteria()
-				.setUserId(principal.getId());
+		PlaylistCriteria criteria = new PlaylistCriteria();
 		if (DEFAULt_playlist.equals(playlistId)) {
 			criteria.setDefaultPlaylist(true);
 		} else {
@@ -206,12 +205,11 @@ public class PlaylistResource extends BaseResource {
 		if (!authenticate()) {
 			throw new ForbiddenClientException();
 		}
-
+		System.out.println("inserting multiple tracks");
 		Validation.required(idList, "ids");
 
 		// Get the playlist
-		PlaylistCriteria criteria = new PlaylistCriteria()
-				.setUserId(principal.getId());
+		PlaylistCriteria criteria = new PlaylistCriteria();
 		if (DEFAULt_playlist.equals(playlistId)) {
 			criteria.setDefaultPlaylist(true);
 		} else {
@@ -504,7 +502,7 @@ public class PlaylistResource extends BaseResource {
 		JsonArrayBuilder items = Json.createArrayBuilder();
 		//        for (PlaylistDto playlist : paginatedList.getResultList()) {
 		for(PlaylistDto playlist : privatePlaylists.getResultList()) {
-			//        	System.out.println( playlist.toString());
+			        	System.out.println( playlist.toString());
 			if(playlist.getName()==null)
 				continue;
 			items.add(Json.createObjectBuilder()
@@ -529,7 +527,7 @@ public class PlaylistResource extends BaseResource {
 
 		//        System.out.println("public playlists fetched");
 
-		//        System.out.println("public playlists");
+		        System.out.println("public playlists");
 
 		//        if the userd id is of the logged in user , then treat it as its personel playlist
 		//        in collobarative plylist, any one can add, but in public playlist on the owner can add
@@ -557,7 +555,7 @@ public class PlaylistResource extends BaseResource {
 		}
 
 
-		//        System.out.println("getting collaborative playlists");
+//		        System.out.println("getting collaborative playlists");
 		PaginatedListTemplate<PlaylistDto> collaborativeTemplate = new CollaborativePlaylistPaginatedList();
         PaginatedList<PlaylistDto> collaborativePlaylists = collaborativeTemplate.getPaginatedList(limit, offset, sortColumn, asc, principal.getId());
 //		PaginatedList<PlaylistDto> collaborativePlaylists = PaginatedLists.create(limit, offset);
@@ -566,10 +564,10 @@ public class PlaylistResource extends BaseResource {
 //				.setPrivacy("collaborative"), sortCriteria3, null);
 
 		//        System.out.println("collaborative playlists fetched");
-		//        System.out.println("collaborative playlists");
+		        System.out.println("collaborative playlists");
 		// Output the list
 		for (PlaylistDto playlist : collaborativePlaylists.getResultList()) {
-			//        	System.out.println( playlist.toString());
+			        	System.out.println( playlist.toString());
 			if(playlist.getName()==null)
 				continue;
 			items.add(Json.createObjectBuilder()

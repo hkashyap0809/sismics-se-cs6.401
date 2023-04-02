@@ -76,61 +76,6 @@ public class AlbumDao extends BaseDao<AlbumDto, AlbumCriteria> {
             parameterMap.put("like", "%" + criteria.getNameLike() + "%");
         }
         
-        
-        
-        System.out.println("fetching all albums");
-        System.out.println();
-        final Handle handle1 = ThreadLocalContext.get().getHandle();
-        Query<Album> albumQuery = handle1.createQuery("Select * from t_album").map(Album.class);
-        List<Album> allAlbums = albumQuery.list();
-        System.out.println(allAlbums.toString());
-        System.out.println();
-        
-        System.out.println("fetching all artists");
-        System.out.println();
-        final Handle handle2 = ThreadLocalContext.get().getHandle();
-        Query<Artist> artistQuery = handle2.createQuery("Select * from t_artist").map(Artist.class);
-        List<Artist> allArtists = artistQuery.list();
-        System.out.println(allArtists.toString());
-        System.out.println();
-        
-        
-        System.out.println("fetching all tracks");
-        System.out.println();
-        final Handle handle3 = ThreadLocalContext.get().getHandle();
-        Query<Track> trackQuery = handle3.createQuery("Select * from t_track").map(Track.class);
-        List<Track> allTracks = trackQuery.list();
-        System.out.println(allTracks.toString());
-        System.out.println();
-        
-        
-//        System.out.println("fetching all user albums");
-//        System.out.println();
-//        final Handle handle4 = ThreadLocalContext.get().getHandle();
-//        Query<UserAlbum> userAlbumQuery = handle4.createQuery("Select * from t_user_album").map(UserAlbum.class);
-//        List<UserAlbum> allUserAlbum = userAlbumQuery.list();
-//        System.out.println(allUserAlbum.toString());
-//        System.out.println();
-//        
-//        
-//        System.out.println("fetching all user tracks");
-//        System.out.println();
-//        final Handle handle5 = ThreadLocalContext.get().getHandle();
-//        Query<UserTrack> userTrackQuery = handle5.createQuery("Select * from t_user_track").map(UserTrack.class);
-//        List<UserTrack> allUserTrack = userTrackQuery.list();
-//        System.out.println(allUserTrack.toString());
-//        System.out.println();
-//        
-//        
-//        System.out.println("fetching all playlist tracks");
-//        System.out.println();
-//        final Handle handle6 = ThreadLocalContext.get().getHandle();
-//        Query<PlaylistTrack> playlistTrackQuery = handle5.createQuery("Select * from t_playlist_track").map(PlaylistTrack.class);
-//        List<PlaylistTrack> allPlaylistTrack = playlistTrackQuery.list();
-//        System.out.println(allPlaylistTrack.toString());
-//        System.out.println();
-        
-        
 
         return new QueryParam(sb.toString(), criteriaList, parameterMap, null, filterCriteria, Lists.newArrayList("a.id"), new AlbumDtoMapper());
     }
