@@ -6,11 +6,9 @@ angular.module('music').controller('SearchSpotifyLastfm', function($scope,Restan
 		var queryParams = {thirdPartyType:'SPOTIFY',queryString:queryString, queryType:$scope.searchQueryType}
 		console.log(queryParams);
   		Restangular.one('search/search-third-party').get(queryParams).then(function(data) {
-	   		alert('data fetched')
 			console.log(data)
     		$scope.searchData = data;
   		}, function(error){
-	  		alert("Error Fetching data")
 	  		console.log(error)
   		});
   		
@@ -21,11 +19,9 @@ angular.module('music').controller('SearchSpotifyLastfm', function($scope,Restan
 		var queryParams = {thirdPartyType:'LASTFM',queryString:queryString, queryType:$scope.searchQueryType}
 		console.log(queryParams)
 		Restangular.one('search/search-third-party').get(queryParams).then(function(data) {
-	   		alert('data fetched')
 			console.log(data)
     		$scope.searchData = data;
   		}, function(error){
-	  		alert("Error Fetching data")
 	  		console.log(error)
   		});
 	  }

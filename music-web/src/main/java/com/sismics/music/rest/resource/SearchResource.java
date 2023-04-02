@@ -147,7 +147,6 @@ public class SearchResource extends BaseResource {
     public Response recommendThirdParty(@QueryParam("thirdPartyType") String thirdPartyType,
     		@QueryParam("queryType") String queryType,
     		@QueryParam("queryString") String queryString) throws IOException {
-    	System.out.println("IN RECOMMEND JAVA API");
     	System.out.println(thirdPartyType);
     	System.out.println(queryType);
     	System.out.println(queryString);

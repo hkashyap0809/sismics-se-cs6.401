@@ -36,7 +36,6 @@ public class ThirdPartySpotify implements ThirdPartyIntegrationStrategy {
 	public Response search(String queryString,String queryType) throws IOException {
 		//generate token		
 		String accessToken = getAccessToken();
-		System.out.println("TOKEN "+accessToken);
 		String BASE_URI="https://api.spotify.com/v1/search";
 		//String SEARCH_URL="https://api.spotify.com/v1/search?type=track&q=indian";
 		
@@ -51,14 +50,12 @@ public class ThirdPartySpotify implements ThirdPartyIntegrationStrategy {
 		conn.setRequestMethod("GET");
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		String output;
-		System.out.println("44");
 		StringBuffer response = new StringBuffer();
 		while ((output = in.readLine()) != null) {
 			response.append(output);
 		}
 		in.close();
 		// printing result from response
-		System.out.println("Response:-" + response.toString());
 
 		ObjectMapper mapper = new ObjectMapper();
         com.fasterxml.jackson.core.JsonParser parser = mapper.getFactory().createParser(response.toString());
@@ -78,8 +75,6 @@ public class ThirdPartySpotify implements ThirdPartyIntegrationStrategy {
 		javax.json.JsonObject finalJsonObject = finalBuilder.build();
 
 		
-		System.out.println("final object");
-    	System.out.println(finalJsonObject.toString());
     	return Response.ok(finalJsonObject.toString(),MediaType.APPLICATION_JSON).build();
 	}
 	
@@ -175,8 +170,7 @@ public class ThirdPartySpotify implements ThirdPartyIntegrationStrategy {
 		seedArtists = seedArtists.substring(0, seedArtists.length() - 1);		
 		queryString=seedArtists;
 		
-		String RECOMMEND_URI = BASE_URI+"?"+queryType+"="+queryString+"&limit=5";
-		System.out.println(RECOMMEND_URI);
+		String RECOMMEND_URI = BASE_URI+"?"+queryType+"="+queryString+"&limit=25";
 
 
 		URL url = new URL(RECOMMEND_URI);
@@ -246,8 +240,6 @@ public class ThirdPartySpotify implements ThirdPartyIntegrationStrategy {
     	finalBuilder.add("tracks", arrayBuilder);
     	javax.json.JsonObject finalJsonObject = finalBuilder.build();
     	
-    	System.out.println("final object");
-    	System.out.println(finalJsonObject.toString());
 		
 
     	return Response.ok(finalJsonObject.toString(),MediaType.APPLICATION_JSON).build();

@@ -29,7 +29,7 @@ public class ThirdPartyLastFM implements ThirdPartyIntegrationStrategy {
 		String API_KEY = "5a24f8cfea22982641452cf45409113a";
 		String BASE_URI="http://ws.audioscrobbler.com/2.0/";
 		
-		String SEARCH_URL=BASE_URI+"?method="+queryType+".search&"+queryType+"="+queryString+"&api_key=+"+API_KEY+"&format=json";
+		String SEARCH_URL=BASE_URI+"?method="+queryType+".search&"+queryType+"="+queryString+"&api_key=+"+API_KEY+"&format=json&limit=20";
 		
 		URL url = new URL(SEARCH_URL);
 		
@@ -49,7 +49,6 @@ public class ThirdPartyLastFM implements ThirdPartyIntegrationStrategy {
 
 		in.close();
 		// printing result from response
-		System.out.println(response.toString());
 		
 		ObjectMapper mapper = new ObjectMapper();
         com.fasterxml.jackson.core.JsonParser parser = mapper.getFactory().createParser(response.toString());
@@ -66,8 +65,6 @@ public class ThirdPartyLastFM implements ThirdPartyIntegrationStrategy {
 		
 		javax.json.JsonObject finalJsonObject = finalBuilder.build();
 
-		System.out.println("final object");
-    	System.out.println(finalJsonObject.toString());
     	return Response.ok(finalJsonObject.toString(),MediaType.APPLICATION_JSON).build();
 		
 	}
@@ -86,11 +83,7 @@ public class ThirdPartyLastFM implements ThirdPartyIntegrationStrategy {
     	finalBuilder.add("tracks", arrayBuilder);
     	JsonObject finalJsonObject = finalBuilder.build();
     	
-    	System.out.println("final object");
-    	System.out.println(finalJsonObject.toString());
 		
-//		return renderJson(finalBuilder);
-//		return Response.ok().entity(finalBuilder.build()).build();
     	return Response.ok(finalJsonObject.toString(),MediaType.APPLICATION_JSON).build();
 		
 	}
@@ -151,7 +144,7 @@ public class ThirdPartyLastFM implements ThirdPartyIntegrationStrategy {
 		String BASE_URI="http://ws.audioscrobbler.com/2.0/";
 		
 		///2.0/?method=track.getsimilar&artist=cher&track=believe&api_key=YOUR_API_KEY&forma...
-		String RECOMMEND_URI=BASE_URI+"?method=track.getsimilar&artist="+artist+"&track="+track+"&api_key=+"+API_KEY+"&format=json&limit=5";
+		String RECOMMEND_URI=BASE_URI+"?method=track.getsimilar&artist="+artist+"&track="+track+"&api_key=+"+API_KEY+"&format=json&limit=10";
 		
 		URL url = new URL(RECOMMEND_URI);
 		
@@ -169,7 +162,6 @@ public class ThirdPartyLastFM implements ThirdPartyIntegrationStrategy {
 		}
 
 		in.close();
-		System.out.println(response.toString());
 		
 		ObjectMapper mapper = new ObjectMapper();
         com.fasterxml.jackson.core.JsonParser parser = mapper.getFactory().createParser(response.toString());
